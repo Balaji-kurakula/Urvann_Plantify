@@ -36,8 +36,16 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const userId = getUserId();
-      const response = await fetch(`http://localhost:5000/api/cart/${userId}`);
-      
+            
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+      const response = await fetch(`${API_BASE_URL}/cart/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });     
+
       if (response.ok) {
         const data = await response.json();
         setCart(data.data.items);
@@ -55,7 +63,8 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const userId = getUserId();
-      const response = await fetch(`http://localhost:5000/api/cart/${userId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_BASE_URL}/cart/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +108,8 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const userId = getUserId();
-      const response = await fetch(`http://localhost:5000/api/cart/${userId}/${plantId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_BASE_URL}/cart/${userId}/${plantId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +140,8 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const userId = getUserId();
-      const response = await fetch(`http://localhost:5000/api/cart/${userId}/${plantId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_BASE_URL}/cart/${userId}/${plantId}`, {
         method: 'DELETE',
       });
 
@@ -161,7 +172,8 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const userId = getUserId();
-      const response = await fetch(`http://localhost:5000/api/cart/${userId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_BASE_URL}/cart/${userId}`, {
         method: 'DELETE',
       });
 

@@ -30,8 +30,8 @@ const useWishlist = () => {
       const userId = getUserId();
       
       console.log('Fetching wishlist for user:', userId);
-      
-      const response = await fetch(`http://localhost:5000/api/wishlist/${userId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_BASE_URL}/wishlist/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -73,8 +73,8 @@ const useWishlist = () => {
       const userId = getUserId();
       
       console.log('Adding to wishlist:', { userId, plantId: plant._id, plantName: plant.name });
-      
-      const response = await fetch(`http://localhost:5000/api/wishlist/${userId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_BASE_URL}/wishlist/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,8 +132,8 @@ const useWishlist = () => {
       const userId = getUserId();
       
       console.log('Removing from wishlist:', { userId, plantId });
-      
-      const response = await fetch(`http://localhost:5000/api/wishlist/${userId}/${plantId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_BASE_URL}/wishlist/${userId}/${plantId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

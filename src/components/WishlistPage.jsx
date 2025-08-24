@@ -26,8 +26,8 @@ const WishlistPage = () => {
       const userId = getUserId();
       
       console.log('Fetching wishlist plants for user:', userId);
-      
-      const response = await fetch(`http://localhost:5000/api/wishlist/${userId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_BASE_URL}/wishlist/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
