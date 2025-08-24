@@ -6,7 +6,7 @@ A modern, responsive React application for browsing and purchasing plants online
 
 - **Production:** [https://urvannplantify.vercel.app](https://urvannplantify.vercel.app)
 - **Backend API:** [https://your-backend.up.railway.app/api](https://your-backend.up.railway.app/api)
--- **Backend Repo : [ https://github.com/Balaji-kurakula/MiniPlantStore_Backend ]
+-  **Backend Repo** : [ https://github.com/Balaji-kurakula/MiniPlantStore_Backend ]
 ## ✨ Features
 
 - 🛍️ **Plant Catalog** - Browse plants with search and filtering
