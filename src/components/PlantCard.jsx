@@ -38,8 +38,16 @@ const PlantCard = ({ plant, isInWishlist, onToggleWishlist }) => {
     >
       <div className="relative">
         {/* Plant Image */}
-        <div className="h-48 bg-green-100 flex items-center justify-center">
-          <span className="text-6xl">🪴</span>
+        <div className="h-48 bg-green-50 flex items-center justify-center overflow-hidden">
+          {plant.image ? (
+            <img
+              src={plant.image}
+              alt={plant.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <span className="text-6xl">🪴</span>
+          )}
         </div>
 
         {/* Wishlist Button */}
@@ -54,11 +62,7 @@ const PlantCard = ({ plant, isInWishlist, onToggleWishlist }) => {
           } ${isTogglingWishlist ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
           aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
         >
-          <Heart
-            className={`w-5 h-5 transition-all ${
-              isInWishlist ? "fill-current" : ""
-            }`}
-          />
+          <Heart className={`w-5 h-5 transition-all ${isInWishlist ? "fill-current" : ""}`} />
         </motion.button>
 
         {/* Stock Status */}
@@ -77,19 +81,14 @@ const PlantCard = ({ plant, isInWishlist, onToggleWishlist }) => {
 
       {/* Details */}
       <div className="p-4">
-        {/* Plant Name */}
         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
           {plant.name}
         </h3>
 
-        {/* Scientific Name */}
         {plant.scientificName && (
-          <p className="text-sm text-gray-500 italic mb-2">
-            {plant.scientificName}
-          </p>
+          <p className="text-sm text-gray-500 italic mb-2">{plant.scientificName}</p>
         )}
 
-        {/* Categories */}
         <div className="flex flex-wrap gap-1 mb-3">
           {plant.categories.slice(0, 3).map((category) => (
             <span
@@ -106,19 +105,17 @@ const PlantCard = ({ plant, isInWishlist, onToggleWishlist }) => {
           )}
         </div>
 
-        {/* Plant Info */}
         <div className="flex flex-wrap items-center gap-4 mb-3 text-xs text-gray-500">
           <div className="flex items-center gap-1">
             <Leaf className="w-3 h-3 text-green-500" />
-            <span>{plant.careLevel || "Medium"} Care</span>
+            <span>{plant.care_level || "Medium"} Care</span>
           </div>
           <div className="flex items-center gap-1">
             <Sun className="w-3 h-3 text-yellow-500" />
-            <span>{plant.lightRequirement || "Medium"} Light</span>
+            <span>{plant.light_requirement || "Medium"} Light</span>
           </div>
         </div>
 
-        {/* Price & Add to Cart */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-xl sm:text-2xl font-bold text-green-600">
             ₹{plant.price}
