@@ -18,7 +18,7 @@ const AddPlantForm = ({ isOpen, onClose, onPlantAdded }) => {
   const [error, setError] = useState('');
 
   const availableCategories = ['Indoor', 'Outdoor', 'Succulent', 'Air Purifying', 'Home Decor', 'Flowering', 'Foliage', 'Medicinal'];
-
+  
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({

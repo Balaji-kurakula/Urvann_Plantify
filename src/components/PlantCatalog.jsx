@@ -3,6 +3,8 @@ import { Search } from 'lucide-react';
 import PlantCard from './PlantCard';
 import useWishlist from '../hooks/useWishlist';
 import { useCart } from '../context/CartContext';
+ import { motion } from "framer-motion";
+import { X } from "lucide-react";
 
 const PlantCatalog = () => {
   const [plants, setPlants] = useState([]);
@@ -83,26 +85,34 @@ const PlantCatalog = () => {
   return (
     <div>
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div className="bg-white rounded-xl shadow p-6 mb-6">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4">
           {/* Search Bar */}
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500 w-5 h-5" />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search plants..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+              className="w-full pl-10 pr-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
             />
           </div>
-          
+
           {/* Filters */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
             >
               <option value="">All Categories</option>
               <option value="Indoor">Indoor</option>
@@ -111,8 +121,8 @@ const PlantCatalog = () => {
               <option value="Air Purifying">Air Purifying</option>
               <option value="Home Decor">Home Decor</option>
             </select>
-            
-            <label className="flex items-center gap-2 whitespace-nowrap">
+
+            <label className="flex items-center gap-2 whitespace-nowrap cursor-pointer">
               <input
                 type="checkbox"
                 checked={inStockOnly}
@@ -125,34 +135,63 @@ const PlantCatalog = () => {
         </div>
 
         {/* Stats */}
-        <div className="mt-4 flex items-center gap-6 text-sm text-gray-600">
-          <span>🌱 {filteredPlants.length} plants found</span>
-          <span>❤️ {wishlistCount} in wishlist</span>
-          <span>🛒 {cartCount} in cart</span>
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+          <span className="px-3 py-1 rounded-full bg-green-50 text-green-700">
+            🌱 {filteredPlants.length} plants found
+          </span>
+          <span className="px-3 py-1 rounded-full bg-pink-50 text-pink-600">
+            ❤️ {wishlistCount} in wishlist
+          </span>
+          <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-600">
+            🛒 {cartCount} in cart
+          </span>
         </div>
       </div>
 
       {/* Plant Grid */}
       {filteredPlants.length === 0 ? (
-        <div className="text-center py-12">
+        <div className="text-center py-16">
           <div className="text-6xl mb-4">🌱</div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No plants found</h3>
-          <p className="text-gray-600">Try adjusting your search or filter criteria</p>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            No plants found
+          </h3>
+          <p className="text-gray-600">
+            Try adjusting your search or filter criteria
+          </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.12 },
+            },
+          }}
+        >
           {filteredPlants.map((plant) => (
-            <PlantCard
+            <motion.div
               key={plant._id}
-              plant={plant}
-              isInWishlist={isInWishlist(plant._id)}
-              onToggleWishlist={handleToggleWishlist}
-            />
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <PlantCard
+                plant={plant}
+                isInWishlist={isInWishlist(plant._id)}
+                onToggleWishlist={handleToggleWishlist}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   );
+
 };
 
 export default PlantCatalog;

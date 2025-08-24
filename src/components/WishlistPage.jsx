@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Heart, ArrowLeft, ShoppingCart, Trash2, RefreshCw, Check } from 'lucide-react';
 import useWishlist from '../hooks/useWishlist';
 import { useCart } from '../context/CartContext'; // Import cart context
+import { motion } from "framer-motion";
 
 const WishlistPage = () => {
   const navigate = useNavigate();
@@ -164,167 +165,185 @@ const WishlistPage = () => {
     );
   }
 
-  return (
-    <div className="max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => navigate('/')}
-            className="flex items-center text-green-600 hover:text-green-700 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to Plants
-          </button>
-          <div className="flex items-center gap-2">
-            <Heart className="w-6 h-6 text-red-500 fill-current" />
-            <h1 className="text-3xl font-bold text-gray-900">
-              My Wishlist ({wishlistPlants.length})
-            </h1>
-          </div>
-        </div>
-        
-        <button
-          onClick={handleRefresh}
-          className="flex items-center gap-2 px-4 py-2 text-green-600 border border-green-600 rounded-lg hover:bg-green-50 transition-colors"
+return (
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    {/* Header */}
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div className="flex items-center gap-4">
+        <button 
+          onClick={() => navigate('/')}
+          className="flex items-center text-green-600 hover:text-green-700 transition-colors"
         >
-          <RefreshCw className="w-4 h-4" />
-          Refresh
+          <ArrowLeft className="w-5 h-5 mr-2" />
+          Back to Plants
         </button>
+        <div className="flex items-center gap-2">
+          <Heart className="w-6 h-6 text-red-500 fill-current" />
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            My Wishlist ({wishlistPlants.length})
+          </h1>
+        </div>
       </div>
 
-      {/* Empty State */}
-      {wishlistPlants.length === 0 ? (
-        <div className="text-center py-16">
-          <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-            Your wishlist is empty
-          </h2>
-          <p className="text-gray-500 mb-8">
-            Start adding plants you love to your wishlist!
-          </p>
-          <button
-            onClick={() => navigate('/')}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center gap-2"
-          >
-            <ShoppingCart className="w-5 h-5" />
-            Browse Plants
-          </button>
-        </div>
-      ) : (
-        <>
-          {/* Wishlist Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {wishlistPlants.map((plant) => {
-              const plantInCart = isInCart(plant._id); // Check if plant is in cart
-              
-              return (
-                <div key={plant._id} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden">
-                  {/* Plant Image */}
-                  <div className="relative">
-                    <div className="h-48 bg-green-100 flex items-center justify-center">
-                      <span className="text-6xl">🪴</span>
-                    </div>
-                    
-                    {/* Remove from Wishlist Button */}
-                    <button
-                      onClick={() => handleRemoveFromWishlist(plant._id, plant.name)}
-                      className="absolute top-3 right-3 p-2 rounded-full bg-red-500 text-white shadow-lg hover:bg-red-600 transition-colors"
-                      aria-label="Remove from wishlist"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+      <button
+        onClick={handleRefresh}
+        className="flex items-center justify-center gap-2 px-4 py-2 text-green-600 border border-green-600 rounded-lg hover:bg-green-50 transition-colors w-full sm:w-auto"
+      >
+        <RefreshCw className="w-4 h-4" />
+        Refresh
+      </button>
+    </div>
 
-                    {/* Stock Status */}
-                    <div className="absolute top-3 left-3">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        plant.isAvailable 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {plant.isAvailable ? 'In Stock' : 'Out of Stock'}
-                      </span>
-                    </div>
+    {/* Empty State */}
+    {wishlistPlants.length === 0 ? (
+      <div className="text-center py-16">
+        <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+        <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+          Your wishlist is empty
+        </h2>
+        <p className="text-gray-500 mb-8">
+          Start adding plants you love to your wishlist!
+        </p>
+        <button
+          onClick={() => navigate('/')}
+          className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center gap-2"
+        >
+          <ShoppingCart className="w-5 h-5" />
+          Browse Plants
+        </button>
+      </div>
+    ) : (
+      <>
+        {/* Wishlist Grid with animations */}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.15 } }
+          }}
+        >
+          {wishlistPlants.map((plant) => {
+            const plantInCart = isInCart(plant._id);
+
+            return (
+              <motion.div
+                key={plant._id}
+                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-transform overflow-hidden"
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {/* Plant Image */}
+                <div className="relative">
+                  <div className="h-40 sm:h-48 bg-green-100 flex items-center justify-center">
+                    <span className="text-5xl sm:text-6xl">🪴</span>
                   </div>
 
-                  {/* Plant Details */}
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{plant.name}</h3>
-                    
-                    {plant.scientificName && (
-                      <p className="text-sm text-gray-500 italic mb-2">{plant.scientificName}</p>
-                    )}
-                    
-                    {/* Categories */}
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {plant.categories?.slice(0, 3).map((category) => (
-                        <span key={category} className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
-                          {category}
-                        </span>
-                      ))}
-                    </div>
+                  {/* Remove Button */}
+                  <button
+                    onClick={() => handleRemoveFromWishlist(plant._id, plant.name)}
+                    className="absolute top-2 right-2 p-2 rounded-full bg-red-500 text-white shadow hover:bg-red-600 transition"
+                    aria-label="Remove from wishlist"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
 
-                    {/* Added Date */}
-                    {plant.addedAt && (
-                      <p className="text-xs text-gray-400 mb-3">
-                        Added {new Date(plant.addedAt).toLocaleDateString()}
-                      </p>
-                    )}
-                    
-                    {/* Price & Dynamic Add to Cart Button */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-green-600">₹{plant.price}</span>
-                      
-                      {/* Conditional Button Rendering */}
-                      {plantInCart ? (
-                        <button
-                          disabled
-                          className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-green-100 text-green-700 border-2 border-green-200 cursor-not-allowed"
-                        >
-                          <Check className="w-4 h-4" />
-                          Added to Cart
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleAddToCart(plant)}
-                          disabled={!plant.isAvailable}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                            plant.isAvailable
-                              ? 'bg-green-600 text-white hover:bg-green-700 hover:scale-105 active:scale-95'
-                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          }`}
-                        >
-                          <ShoppingCart className="w-4 h-4" />
-                          {plant.isAvailable ? 'Add to Cart' : 'Unavailable'}
-                        </button>
-                      )}
-                    </div>
+                  {/* Stock Badge */}
+                  <div className="absolute top-2 left-2">
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                      plant.isAvailable 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {plant.isAvailable ? 'In Stock' : 'Out of Stock'}
+                    </span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
 
-          {/* Bulk Actions */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => {
-                wishlistPlants.forEach(plant => {
-                  if (plant.isAvailable && !isInCart(plant._id)) {
-                    handleAddToCart(plant);
-                  }
-                });
-              }}
-              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <ShoppingCart className="w-5 h-5" />
-              Add All Available to Cart
-            </button>
-          </div>
-        </>
-      )}
-    </div>
-  );
+                {/* Plant Details */}
+                <div className="p-4 flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold text-gray-900">{plant.name}</h3>
+                  {plant.scientificName && (
+                    <p className="text-sm text-gray-500 italic">{plant.scientificName}</p>
+                  )}
+
+                  {/* Categories */}
+                  <div className="flex flex-wrap gap-1">
+                    {plant.categories?.slice(0, 3).map((cat) => (
+                      <span key={cat} className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Added Date */}
+                  {plant.addedAt && (
+                    <p className="text-xs text-gray-400">
+                      Added {new Date(plant.addedAt).toLocaleDateString()}
+                    </p>
+                  )}
+
+                  {/* Price & Button */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-3">
+                    <span className="text-xl sm:text-2xl font-bold text-green-600">
+                      ₹{plant.price}
+                    </span>
+
+                    {plantInCart ? (
+                      <button
+                        disabled
+                        className="w-full sm:w-auto flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-green-100 text-green-700 border border-green-200 cursor-not-allowed"
+                      >
+                        <Check className="w-4 h-4" /> Added to Cart
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleAddToCart(plant)}
+                        disabled={!plant.isAvailable}
+                        className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition ${
+                          plant.isAvailable
+                            ? 'bg-green-600 text-white hover:bg-green-700'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        }`}
+                      >
+                        <ShoppingCart className="w-4 h-4" />
+                        {plant.isAvailable ? 'Add to Cart' : 'Unavailable'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        {/* Bulk Actions */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            onClick={() => {
+              wishlistPlants.forEach(plant => {
+                if (plant.isAvailable && !isInCart(plant._id)) {
+                  handleAddToCart(plant);
+                }
+              });
+            }}
+            className="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            Add All Available to Cart
+          </button>
+        </div>
+      </>
+    )}
+  </div>
+);
+
 };
 
 export default WishlistPage;
