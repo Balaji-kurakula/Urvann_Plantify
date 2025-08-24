@@ -43,13 +43,11 @@ Before you begin, ensure you have the following installed:
 git clone https://github.com/yourusername/plant-store-frontend.git
 cd plant-store-fronten
 
-text
 
 ### 2. Install Dependencies
 
 npm install
 
-text
 
 ### 3. Environment Variables
 
@@ -61,13 +59,11 @@ VITE_API_URL=http://localhost:5000/api
 Environment
 VITE_NODE_ENV=development
 
-text
 
 ### 4. Start Development Server
 
 npm run dev
 
-text
 
 The application will be available at `http://localhost:5173`
 
@@ -106,7 +102,6 @@ frontend/
 ├── package.json
 ├── tailwind.config.js
 ├── vite.config.js
-text
 
 ## 🌐 Environment Variables
 
@@ -130,22 +125,7 @@ Build the project
 npm run build
 
 The dist/ folder contains the production build
-text
 
-## 🔧 Configuration
-
-### Vite Configuration
-
-The project uses a custom Vite configuration for React and development features:
-
-// vite.config.js
-export default defineConfig({
-plugins: [react()
-, serve
-: { por
-: 5173,
-
-text
 
 ### Tailwind CSS
 
@@ -181,8 +161,6 @@ Custom Tailwind configuration with design system colors and utilities.
 Clear node_modules and reinstall
 rm -rf node_modules
 np
-
-text
 
 **API Connection Issues:**
 - Verify `VITE_API_URL` in environment variables
